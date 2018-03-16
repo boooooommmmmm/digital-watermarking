@@ -41,7 +41,7 @@ namespace HiddenWatermark
             if (image.Format != PixelFormats.Bgr32)
                 image = ToBgr32(image);
 
-            var pixelSize = image.Format.BitsPerPixel / 8;
+            var pixelSize = image.Format.BitsPerPixel / 8;      //convert bits to bytes
             var width = image.PixelWidth;
             var height = image.PixelHeight;
             var pixelFormat = image.Format;
@@ -116,7 +116,7 @@ namespace HiddenWatermark
             var wmPixelSize = image.Format.BitsPerPixel / 8;
 
             var wmPixels = new byte[height * width * wmPixelSize];
-            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);
+            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);//DCT
             return wmPixels;
         }
 
