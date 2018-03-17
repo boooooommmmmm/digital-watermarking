@@ -102,14 +102,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HiddenWatermark\HiddenWatermark.csproj">
-      <Project>{c98c374a-9ff4-4c6d-ba5e-e1e1f102374e}</Project>
-      <Name>HiddenWatermark</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="invalid.png" />
     <Resource Include="valid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LBSWatermark\LBSWatermark.csproj">
+      <Project>{c98c374a-9ff4-4c6d-ba5e-e1e1f102374e}</Project>
+      <Name>LBSWatermark</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

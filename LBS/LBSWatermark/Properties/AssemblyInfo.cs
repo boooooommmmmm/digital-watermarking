@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HiddenWatermark")]
+[assembly: AssemblyTitle("LBSWatermark")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HiddenWatermark")]
+[assembly: AssemblyProduct("LBSWatermark")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -35,4 +35,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.8.0.0")]
 [assembly: AssemblyFileVersion("0.8.0.0")]
 
-[assembly: InternalsVisibleTo("HiddenWatermark.Tests")]
+[assembly: InternalsVisibleTo("LBSWatermark.Tests")]

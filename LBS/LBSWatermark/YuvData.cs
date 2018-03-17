@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HiddenWatermark
+namespace LBSWatermark
 {
     internal class YuvData
     {
-        public double[,] Y { get; private set; }
-        public double[,] U { get; private set; }
-        public double[,] V { get; private set; }
+        public double[,] Y { get; private set; }//Y     Luminance/Luma
+        public double[,] U { get; private set; }//U     Chrominance
+        public double[,] V { get; private set; }//V     Chroma
 
         public int Width
         {
@@ -32,7 +32,7 @@ namespace HiddenWatermark
             {
                 for (int j = 0; j < rgb.Height; j++)
                 {
-                    Y[i, j] = ColorSpaceConversion.RgbToY(rgb.R[i, j], rgb.G[i, j], rgb.B[i, j]);
+                    Y[i, j] = ColorSpaceConversion.RgbToY(rgb.R[i, j], rgb.G[i, j], rgb.B[i, j]);//red green blue
                     U[i, j] = ColorSpaceConversion.RgbToU(rgb.R[i, j], rgb.G[i, j], rgb.B[i, j]);
                     V[i, j] = ColorSpaceConversion.RgbToV(rgb.R[i, j], rgb.G[i, j], rgb.B[i, j]);
                 }

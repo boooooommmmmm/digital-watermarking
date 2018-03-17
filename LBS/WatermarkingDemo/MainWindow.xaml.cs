@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using HiddenWatermark;
+using LBSWatermark;
 using Microsoft.Win32;
 
-namespace WatermarkingDemo
+namespace LBSWatermarkingWithUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

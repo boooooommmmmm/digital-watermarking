@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HiddenWatermark
+namespace LBSWatermark
 {
     internal static class ScaledWatermarkCache
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WatermarkingDemo.Properties
+namespace LBSWatermarkingWithUI.Properties
 {
 
 

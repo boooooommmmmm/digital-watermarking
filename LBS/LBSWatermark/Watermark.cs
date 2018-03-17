@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Accord.Math;
 
-namespace HiddenWatermark
+namespace LBSWatermark
 {
     public class Watermark
     {
@@ -81,7 +81,7 @@ namespace HiddenWatermark
             get 
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                using (var stream = assembly.GetManifestResourceStream("HiddenWatermark.watermark.jpg"))
+                using (var stream = assembly.GetManifestResourceStream("HiddenWatermark.watermark.jpg"))    //do not know why
                 using (var ms = new MemoryStream())
                 {
                     stream.CopyTo(ms);
