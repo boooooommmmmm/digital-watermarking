@@ -81,7 +81,7 @@ namespace LBSWatermark
             get 
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                using (var stream = assembly.GetManifestResourceStream("HiddenWatermark.watermark.jpg"))    //do not know why
+                using (var stream = assembly.GetManifestResourceStream("LBSWatermark.watermark.jpg"))    //project source namespace + relative loaction
                 using (var ms = new MemoryStream())
                 {
                     stream.CopyTo(ms);
@@ -92,12 +92,12 @@ namespace LBSWatermark
 
         private void GenerateWatermarkDiff()
         {
-            double[,] gray = new double[DiffWidth, DiffHeight];
+            double[,] gray = new double[DiffWidth, DiffHeight];//[512,512]
             for (int i = 0; i < DiffWidth; i++)
             {
                 for (int j = 0; j < DiffHeight; j++)
                 {
-                    gray[i, j] = 0;
+                    gray[i, j] = 0;// set an empty 2 dimension double array
                 }
             }
 
@@ -116,6 +116,7 @@ namespace LBSWatermark
             {
                 for (int j = 0; j < DiffHeight; j++)
                 {
+                    //rgb(128,128,128) = gray
                     red[i, j] = 128 - rgb.R[i, j];
                     green[i, j] = 128 - rgb.G[i, j];
                     blue[i, j] = 128 - rgb.B[i, j];
@@ -204,7 +205,7 @@ namespace LBSWatermark
 
             BackApplySubBand(data, subband);
             ParallelHaar.IWT(data, 2);
-        }
+        }//end EmbedWatermark
 
         private WatermarkResult RetrieveWatermark(double[,] data)
         {

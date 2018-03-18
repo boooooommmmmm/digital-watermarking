@@ -17,7 +17,7 @@
         
         
         <StackPanel Grid.ColumnSpan="3">
-            <TextBlock Text="Watermarking Demo" FontWeight="ExtraBold" FontSize="30" HorizontalAlignment="Center" />
+            <TextBlock Text="LBS Watermarking" FontWeight="ExtraBold" FontSize="30" HorizontalAlignment="Center" />
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <TextBlock x:Name="SimilarityText" FontSize="12" VerticalAlignment="Center" Padding="5" />
                 <Image x:Name="FailureImage" Source="Invalid.png" Height="25" Visibility="Collapsed" VerticalAlignment="Center" />

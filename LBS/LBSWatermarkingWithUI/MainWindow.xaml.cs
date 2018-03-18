@@ -72,11 +72,12 @@ namespace LBSWatermarkingWithUI
             }
         }
 
+        //core function
         private void BtnEmbedWatermark_Click(object sender, RoutedEventArgs e)
         {
             var fileBytes = File.ReadAllBytes(_imageLocation);
 
-            var sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();//for count time used
             var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
             //var embeddedBytes = _watermark.RetrieveAndEmbedWatermark(fileBytes).WatermarkedImage;
             sw.Stop();
@@ -114,6 +115,7 @@ namespace LBSWatermarkingWithUI
             RenderImageBytes(RetrievedWatermark, result.RecoveredWatermark);
         }
 
+        //render image using bytes
         private void RenderImageBytes(System.Windows.Controls.Image control, byte[] bytes)
         {
             MemoryStream byteStream = new MemoryStream(bytes);
