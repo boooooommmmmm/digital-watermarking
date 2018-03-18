@@ -46,7 +46,7 @@ namespace LBSWatermark
             var height = image.PixelHeight;
             var pixelFormat = image.Format;
 
-            var wmPixels = ScaledWatermarkCache.TryGetScaledWatermark(width, height);
+            var wmPixels = ScaledWatermarkCache.TryGetScaledWatermark(width, height);//try to scale watermark picture as large as original picture
             if (wmPixels == null)
             {
                 var paddingW = GetPaddingW(width);
@@ -56,9 +56,10 @@ namespace LBSWatermark
                 ScaledWatermarkCache.AddScaledWatermark(width, height, wmPixels);
             }
 
-            byte[] pixels = new byte[height * width * pixelSize];
+            byte[] pixels = new byte[height * width * pixelSize];// total byte size in array
             image.CopyPixels(pixels, width * pixelSize, 0);
 
+            //
             Parallel.For(0, height, h =>
             {
                 var hPos = h * width * pixelSize;
@@ -96,7 +97,7 @@ namespace LBSWatermark
 
                 return encoderMemoryStream.ToArray();
             }
-        }
+        }// end MergeWatermarkPixels
 
         private BitmapSource ToBgr32(BitmapSource bitmap)
         {
@@ -171,7 +172,7 @@ namespace LBSWatermark
                 var newHeight = (int)Math.Round((frame.PixelHeight / (double)(frame.PixelHeight + paddingH)) * height);
 
                 var image = CreateImage(bytes, newWidth, newHeight);
-                return ReadPixels(image, ColorSpaceConversion.RgbToU);
+                return ReadPixels(image, ColorSpaceConversion.RgbToU);//resize the original picture into fixed size
             }
         }
 

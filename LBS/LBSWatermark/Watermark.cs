@@ -123,6 +123,7 @@ namespace LBSWatermark
                 }
             }
 
+            //gray level
             _watermarkDiff = _imageHelper.SavePixels(new RgbData(red, green, blue));
         }
 
