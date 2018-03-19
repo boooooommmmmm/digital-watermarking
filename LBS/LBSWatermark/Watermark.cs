@@ -152,6 +152,17 @@ namespace LBSWatermark
         }
 
         /// <summary>
+        /// Test function return gray level of original picture
+        /// </summary>
+        /// <param name="imageBytes"></param>
+        /// <returns></returns>
+        public WatermarkResult GetGrayLevel(byte[] imageBytes)
+        {
+            var data = _imageHelper.MergeGrayLevelPixels(imageBytes);
+            return RetrieveWatermark(data);
+        }
+
+        /// <summary>
         /// Retrieves a watermark from an image
         /// </summary>
         /// <param name="imageBytes">Image bytes</param>

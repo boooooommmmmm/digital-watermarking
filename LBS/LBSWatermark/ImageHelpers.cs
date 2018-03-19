@@ -81,6 +81,8 @@ namespace LBSWatermark
                     {
                         pixels[i] = ToByte(pixels[i] + 128 - wmPixels[i]);
                         pixels[i + 1] = ToByte(pixels[i + 1] + 128 - wmPixels[i + 1]);
+                        //Console.WriteLine("pixels: " + pixels[i]);
+                        //Console.WriteLine("wmPixels: " + wmPixels[i]);
                         //pixels[i + 2] = ToByte(pixels[i + 2] + 128 - wmPixels[i + 2]);
                     }
                 }
@@ -98,6 +100,52 @@ namespace LBSWatermark
                 return encoderMemoryStream.ToArray();
             }
         }// end MergeWatermarkPixels
+
+
+        /// <summary>
+        /// Test function transform all pixels to gray level
+        /// </summary>
+        /// <param name="fileBytes"></param>
+        /// <param name="watermarkBytes"></param>
+        /// <returns></returns>
+        public double[,] MergeGrayLevelPixels(byte[] fileBytes)
+        {
+            var image = CreateImage(fileBytes);
+
+            if (image.Format != PixelFormats.Bgr32)
+                image = ToBgr32(image);
+
+            var pixelSize = image.Format.BitsPerPixel / 8;      //convert bits to bytes
+            var width = image.PixelWidth;
+            var height = image.PixelHeight;
+            var pixelFormat = image.Format;
+
+            byte[] pixels = new byte[height * width * pixelSize];// total byte size in array
+            image.CopyPixels(pixels, width * pixelSize, 0);
+
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                pixels[i] = ToByte(pixels[i] + 0);
+            }
+
+            var grayImage = CreateImage(pixels, width, height);
+            return ReadPixels(image, ColorSpaceConversion.RgbToY);
+
+
+            //using (var encoderMemoryStream = new MemoryStream())
+            //{
+            //    var bitmap = new WriteableBitmap(image);
+            //    bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);
+
+            //    var encoder = new JpegBitmapEncoder();
+            //    encoder.Frames.Add(BitmapFrame.Create(bitmap));
+            //    encoder.Save(encoderMemoryStream);
+
+            //    return encoderMemoryStream.ToArray();
+            //}
+        }// end MergeWatermarkPixels
+
 
         private BitmapSource ToBgr32(BitmapSource bitmap)
         {

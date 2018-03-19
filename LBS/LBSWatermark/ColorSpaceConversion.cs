@@ -10,7 +10,7 @@ namespace LBSWatermark
     {
         public static double RgbToY(double red, double green, double blue)
         {
-            return 0.299 * red + 0.587 * green + 0.114 * blue;
+            return 0.299 * red + 0.587 * green + 0.114 * blue;//to grayscal level
         }
 
         public static double RgbToU(double red, double green, double blue)

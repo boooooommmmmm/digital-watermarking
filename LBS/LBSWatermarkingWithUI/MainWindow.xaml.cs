@@ -89,6 +89,28 @@ namespace LBSWatermarkingWithUI
             RenderImageBytes(WatermarkedImage, embeddedBytes);
         }
 
+        /// <summary>
+        /// Test function, to generate the gray level picture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnGetGrayLevel_Click(object sender, RoutedEventArgs e)
+        {
+            var fileBytes = File.ReadAllBytes(_imageLocation);
+
+            var sw = Stopwatch.StartNew();//for count time used
+            //var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
+            var garyLevelBytes = _watermark.GetGrayLevel(fileBytes);
+            sw.Stop();
+
+            EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
+            _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
+
+            File.WriteAllBytes(_recoveredWatermarkLocation, garyLevelBytes.RecoveredWatermark);
+            RenderImageBytes(RetrievedWatermark, garyLevelBytes.RecoveredWatermark);
+        }
+
+
         private void BtnRetrieveWatermark_Click(object sender, RoutedEventArgs e)
         {
             var fileBytes = File.ReadAllBytes(_watermarkImageLocation);
