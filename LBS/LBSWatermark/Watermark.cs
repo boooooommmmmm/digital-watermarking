@@ -93,11 +93,13 @@ namespace LBSWatermark
         private void GenerateWatermarkDiff()
         {
             double[,] gray = new double[DiffWidth, DiffHeight];//[512,512]
+
+            // set an empty 2 dimension double array
             for (int i = 0; i < DiffWidth; i++)
             {
                 for (int j = 0; j < DiffHeight; j++)
                 {
-                    gray[i, j] = 0;// set an empty 2 dimension double array
+                    gray[i, j] = 0;
                 }
             }
 

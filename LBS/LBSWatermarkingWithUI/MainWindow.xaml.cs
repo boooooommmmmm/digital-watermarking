@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -100,14 +101,27 @@ namespace LBSWatermarkingWithUI
 
             var sw = Stopwatch.StartNew();//for count time used
             //var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
-            var garyLevelBytes = _watermark.GetGrayLevel(fileBytes);
+            Bitmap c = new Bitmap(_imageLocation);
+            Bitmap d;
+            for (int x = 0; x < c.Width; x++)
+            {
+                for (int y = 0; y < c.Height; y++)
+                {
+                    System.Drawing.Color pixelColor = c.GetPixel(x, y);
+                    System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.R, 0, 0);
+                    c.SetPixel(x, y, newColor); // Now greyscale
+                }
+            }
+            d = c;
+            BitmapToImageSource(WatermarkedImage,d); 
+            //var garyLevelBytes = _watermark.GetGrayLevel(fileBytes);
             sw.Stop();
 
             EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
             _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
 
-            File.WriteAllBytes(_recoveredWatermarkLocation, garyLevelBytes.RecoveredWatermark);
-            RenderImageBytes(RetrievedWatermark, garyLevelBytes.RecoveredWatermark);
+            //File.WriteAllBytes(_recoveredWatermarkLocation, garyLevelBytes.RecoveredWatermark);
+            //RenderImageBytes(RetrievedWatermark, garyLevelBytes.RecoveredWatermark);
         }
 
 
@@ -147,6 +161,22 @@ namespace LBSWatermarkingWithUI
             imageSource.EndInit();
 
             control.Source = imageSource;
+        }
+
+        private BitmapImage BitmapToImageSource(System.Windows.Controls.Image control, Bitmap bitmap)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                memory.Position = 0;
+                BitmapImage bitmapimage = new BitmapImage();
+                bitmapimage.BeginInit();
+                bitmapimage.StreamSource = memory;
+                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapimage.EndInit();
+
+                return bitmapimage;
+            }
         }
     }
 }
