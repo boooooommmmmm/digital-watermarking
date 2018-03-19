@@ -129,21 +129,10 @@ namespace LBSWatermark
                 pixels[i] = ToByte(pixels[i] + 0);
             }
 
-            var grayImage = CreateImage(pixels, width, height);
+            //var grayImage = CreateImage(pixels, width, height);
+            Console.WriteLine(ReadPixels(image, ColorSpaceConversion.RgbToY).ToString());
             return ReadPixels(image, ColorSpaceConversion.RgbToY);
 
-
-            //using (var encoderMemoryStream = new MemoryStream())
-            //{
-            //    var bitmap = new WriteableBitmap(image);
-            //    bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);
-
-            //    var encoder = new JpegBitmapEncoder();
-            //    encoder.Frames.Add(BitmapFrame.Create(bitmap));
-            //    encoder.Save(encoderMemoryStream);
-
-            //    return encoderMemoryStream.ToArray();
-            //}
         }// end MergeWatermarkPixels
 
 

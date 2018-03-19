@@ -276,7 +276,7 @@ namespace LBSWatermark
             var recoveredWatermarkBytes = _imageHelper.SavePixels(recoveredData);
 
             return new WatermarkResult(similarity, recoveredWatermarkBytes);
-        }
+        }// end RetrieveWatermark
 
         private IEnumerable<double> MidBand(double[,] block)
         {
