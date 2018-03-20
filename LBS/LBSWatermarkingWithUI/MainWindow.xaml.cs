@@ -100,28 +100,22 @@ namespace LBSWatermarkingWithUI
             var fileBytes = File.ReadAllBytes(_imageLocation);
 
             var sw = Stopwatch.StartNew();//for count time used
-            //var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
+
             Bitmap c = new Bitmap(_imageLocation);
-            Bitmap d;
             for (int x = 0; x < c.Width; x++)
             {
                 for (int y = 0; y < c.Height; y++)
                 {
                     System.Drawing.Color pixelColor = c.GetPixel(x, y);
-                    System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.R, 0, 0);
-                    c.SetPixel(x, y, newColor); // Now greyscale
+                    int grayScale = (int)((pixelColor.R * 0.299) + (pixelColor.G * 0.587) + (pixelColor.B * 0.114));//convert color to gray
+                    System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.A, grayScale, grayScale, grayScale);
+                    c.SetPixel(x, y, newColor); 
                 }
             }
-            d = c;
-            BitmapToImageSource(WatermarkedImage,d); 
-            //var garyLevelBytes = _watermark.GetGrayLevel(fileBytes);
+            BitmapToImageSource(GrayScaleImage, c); //render gray image
+
             sw.Stop();
-
             EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
-            _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
-
-            //File.WriteAllBytes(_recoveredWatermarkLocation, garyLevelBytes.RecoveredWatermark);
-            //RenderImageBytes(RetrievedWatermark, garyLevelBytes.RecoveredWatermark);
         }
 
 
@@ -163,7 +157,7 @@ namespace LBSWatermarkingWithUI
             control.Source = imageSource;
         }
 
-        private BitmapImage BitmapToImageSource(System.Windows.Controls.Image control, Bitmap bitmap)
+        private void BitmapToImageSource(System.Windows.Controls.Image control, Bitmap bitmap)
         {
             using (MemoryStream memory = new MemoryStream())
             {
@@ -175,7 +169,7 @@ namespace LBSWatermarkingWithUI
                 bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapimage.EndInit();
 
-                return bitmapimage;
+                control.Source = bitmapimage;
             }
         }
     }
