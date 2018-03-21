@@ -158,26 +158,7 @@ namespace LBSWatermark
             var wmPixelSize = image.Format.BitsPerPixel / 8;
 
             var wmPixels = new byte[height * width * wmPixelSize];
-            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);//DCT
-            Console.WriteLine("image: " + image.Width + "|" + image.Height);
-            Console.WriteLine("image: " + image);
-            //test
-
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            //encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-            encoder.QualityLevel = 100;
-            // byte[] bit = new byte[0];
-            using (MemoryStream stream = new MemoryStream())
-            {
-                encoder.Frames.Add(BitmapFrame.Create(image));
-                encoder.Save(stream);
-                byte[] bit = stream.ToArray();
-                stream.Close();
-
-                for (int i = 0; i<bit.Length;i++) { Console.WriteLine("bit: " + bit[i]); }
-
-                return bit;
-            }
+            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);//DCT;
 
             return wmPixels;
         }
