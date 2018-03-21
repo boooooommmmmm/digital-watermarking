@@ -131,6 +131,7 @@ namespace LBSWatermarkingWithUI
 
             File.WriteAllBytes(_watermarkImageLocation, embeddedBytes);
 
+
             RenderImageBytes(WatermarkedImage, embeddedBytes);
         }
         //private void BtnEmbedWatermark_Click(object sender, RoutedEventArgs e)

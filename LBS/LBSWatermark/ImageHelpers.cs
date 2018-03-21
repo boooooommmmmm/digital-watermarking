@@ -54,8 +54,6 @@ namespace LBSWatermark
                 var paddingW = GetPaddingW(width);
                 var paddingH = GetPaddingH(height);
 
-                //test
-                return ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);
                 wmPixels = ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);
                 ScaledWatermarkCache.AddScaledWatermark(width, height, wmPixels);
             }
@@ -63,7 +61,7 @@ namespace LBSWatermark
             byte[] pixels = new byte[height * width * pixelSize];// total byte size in array
             image.CopyPixels(pixels, width * pixelSize, 0);
 
-            //
+            
             Parallel.For(0, height, h =>
             {
                 var hPos = h * width * pixelSize;
@@ -134,7 +132,6 @@ namespace LBSWatermark
             }
 
             //var grayImage = CreateImage(pixels, width, height);
-            Console.WriteLine(ReadPixels(image, ColorSpaceConversion.RgbToY).ToString());
             return ReadPixels(image, ColorSpaceConversion.RgbToY);
 
         }// end MergeWatermarkPixels
@@ -196,7 +193,7 @@ namespace LBSWatermark
             }
         }
 
-        public double[,] ExtractWatermarkData(byte[] bytes, int width, int height)
+        public double[,] ExtractWatermarkData(byte[] bytes, int width, int height)//image, 512, 512
         {
             if (bytes == null || bytes.Length == 0)
             {
@@ -216,7 +213,7 @@ namespace LBSWatermark
                 var image = CreateImage(bytes, newWidth, newHeight);
                 return ReadPixels(image, ColorSpaceConversion.RgbToU);//resize the original picture into fixed size
             }
-        }
+        }// end ExtractWatermarkData
 
         private static BitmapSource CreateImage(byte[] bytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {

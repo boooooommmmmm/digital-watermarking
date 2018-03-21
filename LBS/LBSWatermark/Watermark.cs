@@ -127,6 +127,7 @@ namespace LBSWatermark
 
             //gray level
             _watermarkDiff = _imageHelper.SavePixels(new RgbData(red, green, blue));
+
         }
 
         /// <summary>
@@ -182,7 +183,7 @@ namespace LBSWatermark
             {
                 for (int y = 0; y < _watermarkPixels.Height; y++)
                 {
-                    watermarkData[x, y] = _watermarkPixels.R[x, y] > 125 ? 255 : 0;
+                    watermarkData[x, y] = _watermarkPixels.R[x, y] > 125 ? 255 : 0;//convert to black or white only
                 }
             }
 
@@ -195,7 +196,7 @@ namespace LBSWatermark
                 {
                     var block = subband.Submatrix(x * BlockSize, x * BlockSize + BlockSize - 1, y * BlockSize, y * BlockSize + BlockSize - 1);
 
-                    CosineTransform.DCT(block);
+                    CosineTransform.DCT(block);//DCT here
 
                     var midbandSum = Math.Max(2, Math.Abs(MidBand(block).Sum()));
                     var sigma = (watermarkData[x, y] > 125 ? 3 : -3);
