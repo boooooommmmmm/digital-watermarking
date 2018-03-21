@@ -35,12 +35,14 @@
 
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="5">
             <Button x:Name="BtnLoadImage" Content="Load" Margin="5" Click="BtnLoadImage_Click" FontSize="16" />
-            <Button x:Name="BtnEmbedWatermark" Content="Embed Watermark" Margin="5" Click="BtnEmbedWatermark_Click" FontSize="16" />
-            <Button x:Name="BtnGetGrayLevel" Content="Get Gray Level" Margin="5,5,5,0" Click="BtnGetGrayLevel_Click" FontSize="16" Height="24" VerticalAlignment="Top" />
-            <TextBlock x:Name="EmbedTime" Margin="5" FontSize="12" />
+			<Button x:Name="BtnGetGrayLevel" Content="Get Gray Level" Margin="5,5,5,0" Click="BtnGetGrayLevel_Click" FontSize="16" Height="24" VerticalAlignment="Top" />
+			<Button x:Name="BtnEmbedWatermark" Content="Embed Watermark" Margin="5" Click="BtnEmbedWatermark_Click" FontSize="16" />
+			<TextBlock x:Name="EmbedTime" Margin="5" FontSize="12" />
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="5">
+		<StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="5">
+		</StackPanel>
+		<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="5">
             <Button x:Name="BtnSaveWatermarkedImage" Content="Save" Margin="5" Click="BtnSaveWatermarkedImage_Click" FontSize="16" />
             <Button x:Name="BtnLoadWatermarkedImage" Content="Load" Margin="5" Click="BtnLoadWatermarkedImage_Click" FontSize="16" />
             <Button x:Name="BtnRetrieveWatermark" Content="Retrieve Watermark" Margin="5" Click="BtnRetrieveWatermark_Click" FontSize="16" />

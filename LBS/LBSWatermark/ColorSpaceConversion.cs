@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LBSWatermark
 {
-    internal static class ColorSpaceConversion
+    public static class ColorSpaceConversion
     {
         public static double RgbToY(double red, double green, double blue)
         {

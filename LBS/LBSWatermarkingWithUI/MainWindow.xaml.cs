@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -19,8 +20,12 @@ namespace LBSWatermarkingWithUI
     public partial class MainWindow : Window
     {
         private string _imageLocation;
+        private string _grayScaleImageLocation;
         private string _watermarkImageLocation;
         private string _recoveredWatermarkLocation;
+        private List<int> grayscaleListY = new List<int>();
+        private List<int> grayscaleListU = new List<int>();
+        private List<int> grayscaleListV = new List<int>();
 
         private Watermark _watermark;
 
@@ -29,6 +34,7 @@ namespace LBSWatermarkingWithUI
             InitializeComponent();
 
             _imageLocation = AppDomain.CurrentDomain.BaseDirectory + "original.jpg";
+            _grayScaleImageLocation = AppDomain.CurrentDomain.BaseDirectory + "grayScaleImage.jpg";
             _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
             _recoveredWatermarkLocation = AppDomain.CurrentDomain.BaseDirectory + "recoveredwatermark.jpg";
 
@@ -73,10 +79,47 @@ namespace LBSWatermarkingWithUI
             }
         }
 
+        /// <summary>
+        /// Test function, to generate the gray level picture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnGetGrayLevel_Click(object sender, RoutedEventArgs e)
+        {
+            var fileBytes = File.ReadAllBytes(_imageLocation);        
+            grayscaleListY.Clear();
+            grayscaleListU.Clear();
+            grayscaleListV.Clear();
+            
+            var sw = Stopwatch.StartNew();//for count time used
+
+            Bitmap grayScaleBitMap = new Bitmap(_imageLocation);
+            for (int x = 0; x < grayScaleBitMap.Width; x++)
+            {
+                for (int y = 0; y < grayScaleBitMap.Height; y++)
+                {
+                    System.Drawing.Color pixelColor = grayScaleBitMap.GetPixel(x, y);
+                    int grayscaleY = (int)(ColorSpaceConversion.RgbToY(pixelColor.R, pixelColor.G, pixelColor.B));//convert color to gray
+                    int grayscaleU = (int)(ColorSpaceConversion.RgbToU(pixelColor.R, pixelColor.G, pixelColor.B));
+                    int grayscaleV = (int)(ColorSpaceConversion.RgbToV(pixelColor.R, pixelColor.G, pixelColor.B));
+                    grayscaleListY.Add(grayscaleY);
+                    grayscaleListU.Add(grayscaleU);
+                    grayscaleListV.Add(grayscaleV);
+                    System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.A, grayscaleY, grayscaleY, grayscaleY);
+                    grayScaleBitMap.SetPixel(x, y, newColor);
+                }
+            }
+            BitmapToImageSource(GrayScaleImage, grayScaleBitMap); //render gray image
+
+            sw.Stop();
+            grayScaleBitMap.Save(AppDomain.CurrentDomain.BaseDirectory + "grayScaleImage.jpg");//save to LBSWatermarkingWithUI/bin/debug
+            EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
+        }
+
         //core function
         private void BtnEmbedWatermark_Click(object sender, RoutedEventArgs e)
         {
-            var fileBytes = File.ReadAllBytes(_imageLocation);
+            var fileBytes = File.ReadAllBytes(_grayScaleImageLocation);
 
             var sw = Stopwatch.StartNew();//for count time used
             var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
@@ -87,37 +130,26 @@ namespace LBSWatermarkingWithUI
             _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
 
             File.WriteAllBytes(_watermarkImageLocation, embeddedBytes);
-            RenderImageBytes(WatermarkedImage, embeddedBytes);
+
+            //test 
+            RenderImageBytes(GrayScaleImage, embeddedBytes);
+            //RenderImageBytes(WatermarkedImage, embeddedBytes);
         }
+        //private void BtnEmbedWatermark_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var fileBytes = File.ReadAllBytes(_imageLocation);        
 
-        /// <summary>
-        /// Test function, to generate the gray level picture
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnGetGrayLevel_Click(object sender, RoutedEventArgs e)
-        {
-            var fileBytes = File.ReadAllBytes(_imageLocation);
+        //    var sw = Stopwatch.StartNew();//for count time used
+        //    var embeddedBytes = _watermark.EmbedWatermark(fileBytes);
+        //    //var embeddedBytes = _watermark.RetrieveAndEmbedWatermark(fileBytes).WatermarkedImage;
+        //    sw.Stop();
 
-            var sw = Stopwatch.StartNew();//for count time used
+        //    EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
+        //    _watermarkImageLocation = AppDomain.CurrentDomain.BaseDirectory + "embeddedwatermark.jpg";
 
-            Bitmap c = new Bitmap(_imageLocation);
-            for (int x = 0; x < c.Width; x++)
-            {
-                for (int y = 0; y < c.Height; y++)
-                {
-                    System.Drawing.Color pixelColor = c.GetPixel(x, y);
-                    int grayScale = (int)((pixelColor.R * 0.299) + (pixelColor.G * 0.587) + (pixelColor.B * 0.114));//convert color to gray
-                    System.Drawing.Color newColor = System.Drawing.Color.FromArgb(pixelColor.A, grayScale, grayScale, grayScale);
-                    c.SetPixel(x, y, newColor); 
-                }
-            }
-            BitmapToImageSource(GrayScaleImage, c); //render gray image
-
-            sw.Stop();
-            EmbedTime.Text = String.Format("{0}ms", sw.ElapsedMilliseconds);
-        }
-
+        //    File.WriteAllBytes(_watermarkImageLocation, embeddedBytes);
+        //    RenderImageBytes(WatermarkedImage, embeddedBytes);
+        //}
 
         private void BtnRetrieveWatermark_Click(object sender, RoutedEventArgs e)
         {

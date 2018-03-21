@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,6 +54,8 @@ namespace LBSWatermark
                 var paddingW = GetPaddingW(width);
                 var paddingH = GetPaddingH(height);
 
+                //test
+                return ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);
                 wmPixels = ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);
                 ScaledWatermarkCache.AddScaledWatermark(width, height, wmPixels);
             }
@@ -155,6 +159,26 @@ namespace LBSWatermark
 
             var wmPixels = new byte[height * width * wmPixelSize];
             image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);//DCT
+            Console.WriteLine("image: " + image.Width + "|" + image.Height);
+            Console.WriteLine("image: " + image);
+            //test
+
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            //encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            encoder.QualityLevel = 100;
+            // byte[] bit = new byte[0];
+            using (MemoryStream stream = new MemoryStream())
+            {
+                encoder.Frames.Add(BitmapFrame.Create(image));
+                encoder.Save(stream);
+                byte[] bit = stream.ToArray();
+                stream.Close();
+
+                for (int i = 0; i<bit.Length;i++) { Console.WriteLine("bit: " + bit[i]); }
+
+                return bit;
+            }
+
             return wmPixels;
         }
 
