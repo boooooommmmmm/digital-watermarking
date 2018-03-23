@@ -187,8 +187,10 @@ namespace LBSWatermark
                 }
             }
 
-            ParallelHaar.FWT(data, 2);
-            var subband = LL2(data);
+            //test
+            //ParallelHaar.FWT(data, 2);
+            //var subband = LL2(data);
+            var subband = data;
 
             Parallel.For(0, _watermarkPixels.Height, y =>
             {
