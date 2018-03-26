@@ -192,10 +192,11 @@ namespace LBSWatermark
             //var subband = LL2(data);
             var subband = data;
 
-            Parallel.For(0, _watermarkPixels.Height, y =>
+            Parallel.For(0, _watermarkPixels.Height, y =>//height = 32
             {
                 for (int x = 0; x < _watermarkPixels.Width; x++)
                 {
+                    //BlockSize = 4
                     var block = subband.Submatrix(x * BlockSize, x * BlockSize + BlockSize - 1, y * BlockSize, y * BlockSize + BlockSize - 1);
 
                     CosineTransform.DCT(block);//DCT here

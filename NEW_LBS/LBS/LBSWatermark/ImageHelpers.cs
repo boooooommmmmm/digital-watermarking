@@ -162,9 +162,9 @@ namespace LBSWatermark
 
         public byte[] SavePixels(RgbData data)
         {
-            var width = data.R.GetUpperBound(0) + 1;
-            var height = data.R.GetUpperBound(1) + 1;
-            var pixelSize = PixelFormats.Bgr32.BitsPerPixel / 8;
+            var width = data.R.GetUpperBound(0) + 1;                //width=32
+            var height = data.R.GetUpperBound(1) + 1;               //height=32
+            var pixelSize = PixelFormats.Bgr32.BitsPerPixel / 8;    //pixelSize=4
 
             byte[] pixels = new byte[width * pixelSize * height];
             Parallel.For(0, height, h =>
@@ -191,7 +191,7 @@ namespace LBSWatermark
 
                 return encoderMemoryStream.ToArray();
             }
-        }
+        }//end SavePixels
 
         public double[,] ExtractWatermarkData(byte[] bytes, int width, int height)//image, 512, 512
         {
