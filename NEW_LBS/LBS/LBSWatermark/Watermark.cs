@@ -151,6 +151,7 @@ namespace LBSWatermark
         /// <returns>Image bytes of embedded watermark</returns>
         public byte[] EmbedWatermark(byte[] imageBytes)
         {
+            Console.WriteLine("WM: " + _watermarkDiff.Length);
             return _imageHelper.MergeWatermarkPixels(imageBytes, _watermarkDiff);
         }
 

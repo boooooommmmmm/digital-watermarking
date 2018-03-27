@@ -18,8 +18,8 @@ namespace LBSWatermark
         private delegate double ColorConversion(double red, double green, double blue);
         private const int PaddingLimit = 10;
 
-        private int[] _clippingWidths = new int[] { 1024, 911, 832, 800, 744, 700, 640, 600, 568, 508, 480, 448, 400, 360, 333 };
-        private int[] _clippingHeights = new int[] { 768, 683, 624, 600, 558, 525, 480, 450, 426, 373, 360, 336, 300, 270, 250 };
+        private int[] _clippingWidths = new int[] { 1024, 911, 832, 800, 744, 700, 640, 600, 568, 512, 508, 480, 448, 400, 360, 333 };
+        private int[] _clippingHeights = new int[] { 768, 683, 624, 600, 558, 525, 512, 480, 450, 426, 373, 360, 336, 300, 270, 250 };
 
         public ImageHelpers(bool clipSupport, IEnumerable<int> widths, IEnumerable<int> heights)
         {
@@ -43,25 +43,28 @@ namespace LBSWatermark
             if (image.Format != PixelFormats.Bgr32)
                 image = ToBgr32(image);
 
-            var pixelSize = image.Format.BitsPerPixel / 8;      //convert bits to bytes
+            var pixelSize = image.Format.BitsPerPixel / 8;      //convert bits to bytes //pixelSize = 4 
             var width = image.PixelWidth;
             var height = image.PixelHeight;
             var pixelFormat = image.Format;
 
-            var wmPixels = ScaledWatermarkCache.TryGetScaledWatermark(width, height);//try to scale watermark picture as large as original picture
+            var wmPixels = ScaledWatermarkCache.TryGetScaledWatermark(width, height);//if first time embed watermark, it will return null and wmPixels is null
             if (wmPixels == null)
             {
+                //if original picture is 512*512, padding H = 0; W = 0
                 var paddingW = GetPaddingW(width);
                 var paddingH = GetPaddingH(height);
 
-                wmPixels = ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);
+                wmPixels = ScaleWatermark(watermarkBytes, width, height, paddingW, paddingH);   //new watermark pic is nearly as big as original picture
+                                                                                                //wmPixels is 1024*1024 length =>128*128
+                                                                                                //NEED CHANGE HERE
                 ScaledWatermarkCache.AddScaledWatermark(width, height, wmPixels);
             }
 
             byte[] pixels = new byte[height * width * pixelSize];// total byte size in array
             image.CopyPixels(pixels, width * pixelSize, 0);
 
-            
+
             Parallel.For(0, height, h =>
             {
                 var hPos = h * width * pixelSize;
@@ -151,11 +154,13 @@ namespace LBSWatermark
 
         private byte[] ScaleWatermark(byte[] watermarkBytes, int width, int height, int paddingW, int paddingH)
         {
+            //Console.WriteLine("WM: " + watermarkBytes.Length);
+            //watermarkBytes.Length is 13017
             var image = CreateImage(watermarkBytes, width + paddingW, height + paddingH);
-            var wmPixelSize = image.Format.BitsPerPixel / 8;
+            var wmPixelSize = image.Format.BitsPerPixel / 8;//wmPixelSize = 4
 
             var wmPixels = new byte[height * width * wmPixelSize];
-            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);//DCT;
+            image.CopyPixels(new Int32Rect(paddingW / 2, paddingH / 2, width, height), wmPixels, width * wmPixelSize, 0);
 
             return wmPixels;
         }
@@ -171,7 +176,7 @@ namespace LBSWatermark
             {
                 var hPos = h * width * pixelSize;                   //hPos = height position
 
-                //every four bytes are one pixel, first for BLUE, second for GREEN, third for RED
+                //every four bytes are one pixel, first for BLUE, second for GREEN, third for RED, fourth left empty
                 for (int w = 0; w < width; w++)
                 {
                     var i = hPos + (w * pixelSize);
@@ -182,7 +187,7 @@ namespace LBSWatermark
             });
 
             var frame = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, BitmapPalettes.WebPalette);//96 dpi
-            frame.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);
+            frame.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);//rectangle size is 32*32 and write it to bitmap
 
             using (var encoderMemoryStream = new MemoryStream())
             {

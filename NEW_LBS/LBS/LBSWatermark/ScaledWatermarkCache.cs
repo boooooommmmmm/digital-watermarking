@@ -17,7 +17,7 @@ namespace LBSWatermark
         public static byte[] TryGetScaledWatermark(int width, int height)
         {
             var key = ToKey(width, height);
-            _count[key] = _count.ContainsKey(key) ? _count[key] + 1 : 1;
+            _count[key] = _count.ContainsKey(key) ? _count[key] + 1 : 1;//normally not contains key and return null
             if (_cache.ContainsKey(key))
             {
                 return _cache[key];
