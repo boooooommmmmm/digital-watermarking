@@ -164,23 +164,24 @@ namespace LBSWatermark
         {
             var width = data.R.GetUpperBound(0) + 1;                //width=32
             var height = data.R.GetUpperBound(1) + 1;               //height=32
-            var pixelSize = PixelFormats.Bgr32.BitsPerPixel / 8;    //pixelSize=4
+            var pixelSize = PixelFormats.Bgr32.BitsPerPixel / 8;    //pixelSize=4 =>4bytes/32bit per pixel  
 
-            byte[] pixels = new byte[width * pixelSize * height];
+            byte[] pixels = new byte[width * pixelSize * height];   //size is 32*32*4
             Parallel.For(0, height, h =>
             {
-                var hPos = h * width * pixelSize;
+                var hPos = h * width * pixelSize;                   //hPos = height position
+
+                //every four bytes are one pixel, first for BLUE, second for GREEN, third for RED
                 for (int w = 0; w < width; w++)
                 {
                     var i = hPos + (w * pixelSize);
-
                     pixels[i] = ToByte(data.B[w, h]);
                     pixels[i + 1] = ToByte(data.G[w, h]);
                     pixels[i + 2] = ToByte(data.R[w, h]);
                 }
             });
 
-            var frame = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, BitmapPalettes.WebPalette);
+            var frame = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, BitmapPalettes.WebPalette);//96 dpi
             frame.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);
 
             using (var encoderMemoryStream = new MemoryStream())
@@ -189,7 +190,7 @@ namespace LBSWatermark
                 encoder.Frames.Add(BitmapFrame.Create(frame));
                 encoder.Save(encoderMemoryStream);
 
-                return encoderMemoryStream.ToArray();
+                return encoderMemoryStream.ToArray();//write bitmap
             }
         }//end SavePixels
 

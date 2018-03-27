@@ -179,6 +179,8 @@ namespace LBSWatermark
         private void EmbedWatermark(double[,] data)
         {
             double[,] watermarkData = new double[_watermarkPixels.Width, _watermarkPixels.Height];
+
+            //convet 32*32 watermark picture to black and white only (102->black(0);922->wthite(255))
             for (int x = 0; x < _watermarkPixels.Width; x++)
             {
                 for (int y = 0; y < _watermarkPixels.Height; y++)
@@ -194,7 +196,7 @@ namespace LBSWatermark
 
             Parallel.For(0, _watermarkPixels.Height, y =>//height = 32
             {
-                for (int x = 0; x < _watermarkPixels.Width; x++)
+                for (int x = 0; x < _watermarkPixels.Width; x++)//width = 32
                 {
                     //BlockSize = 4
                     var block = subband.Submatrix(x * BlockSize, x * BlockSize + BlockSize - 1, y * BlockSize, y * BlockSize + BlockSize - 1);
