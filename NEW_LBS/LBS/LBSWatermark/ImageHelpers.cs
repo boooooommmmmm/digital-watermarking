@@ -188,7 +188,7 @@ namespace LBSWatermark
 
             var frame = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgr32, BitmapPalettes.WebPalette);//96 dpi
             frame.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * pixelSize, 0);//rectangle size is 32*32 and write it to bitmap
-
+            
             using (var encoderMemoryStream = new MemoryStream())
             {
                 var encoder = new JpegBitmapEncoder();

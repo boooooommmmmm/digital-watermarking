@@ -122,11 +122,12 @@ namespace LBSWatermark
                     red[i, j] = 128 - rgb.R[i, j];
                     green[i, j] = 128 - rgb.G[i, j];
                     blue[i, j] = 128 - rgb.B[i, j];
+                    Console.WriteLine(rgb.R[i, j]);
                 }
             }
 
             //gray level
-            _watermarkDiff = _imageHelper.SavePixels(new RgbData(red, green, blue));
+            _watermarkDiff = _imageHelper.SavePixels(new RgbData(red, green, blue));//watermarkDiff length = 13017 
 
         }
 
@@ -151,7 +152,7 @@ namespace LBSWatermark
         /// <returns>Image bytes of embedded watermark</returns>
         public byte[] EmbedWatermark(byte[] imageBytes)
         {
-            Console.WriteLine("WM: " + _watermarkDiff.Length);
+            return _watermarkDiff;
             return _imageHelper.MergeWatermarkPixels(imageBytes, _watermarkDiff);
         }
 
